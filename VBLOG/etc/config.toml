@@ -1,0 +1,11 @@
+# 就是一个对象 {username: string, password: string}
+# struct mysql
+# 读取toml配置: toml库   toml配置文件----> object
+//IP地址: root Aliyungzdx1@
+ // 数据库 mysql8.4 root 密码:Gzdx123456@  --Gzdx123456@
+[mysql]
+host = "47.109.189.135"
+port = 3306
+db = "vblog"
+username = "root"
+password = "Gzdx123456@"
