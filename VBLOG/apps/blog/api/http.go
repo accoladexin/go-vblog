@@ -2,8 +2,12 @@ package api
 
 import (
 	"github.com/accoladexin/vblog/apps/blog"
+	"github.com/accoladexin/vblog/ioc"
 	"github.com/gin-gonic/gin"
 )
+
+// 用来检查是否实现了ioc的接口
+var _ ioc.ControllerObjIoc = &Handler{}
 
 // 处理Http报文的处理器
 // 又这个handler类来负责实现具体的API 接口
@@ -23,21 +27,16 @@ func NewHandler() *Handler {
 
 // 构造函数带有具体的对象
 func NewHandlerWithObj(svc blog.Service) *Handler {
-	return &Handler{
-		svc: svc,
-	}
-}
+	//svcobj := ioc.GetServiceIocByName(blog.AppName)
+	// //断言
+	//service := svcobj.(blog.Service)
+	//if service == nil {
+	//	panic("service is nil")
+	//}
 
-// 让他从Ioc中获取依赖的对象
-func (h *Handler) Init() error {
-	// 获取出来的这个对象是个Ioc对象
-	// 使用类型断言 来把any --> 正在的业务对象
-	// 内置逻辑: blog.AppName 名称 --> blog.Service 类型  object.(type struct<object>|interface)
-	//  var a = any   a.(string)
-	// svc = ioc.GetController(blog.AppName)
-	// svc.(blog.Service)
-	//h.svc = ioc.GetController(blog.AppName).(blog.Service)
-	return nil
+	return &Handler{
+		svc: svc, // 非ioc版本
+	}
 }
 
 func (h *Handler) Name() string {
@@ -60,4 +59,19 @@ func (h *Handler) Registry(r gin.IRouter) {
 // 怎么控制加载哪些业务单元
 func init() {
 	//ioc.RegistryHttpApi(&Handler{})
+	// 将serice对象注册到ioc容器
+	//fmt.Println("========================================================")
+	ioc.RegisterControllerIoc(&Handler{})
+}
+
+// 让他从Ioc中获取依赖的对象
+func (h *Handler) Init() error {
+	// 获取出来的这个对象是个Ioc对象
+	// 使用类型断言 来把any --> 正在的业务对象
+	// 内置逻辑: blog.AppName 名称 --> blog.Service 类型  object.(type struct<object>|interface)
+	//  var a = any   a.(string)
+	// svc = ioc.GetController(blog.AppName)
+	// svc.(blog.Service)
+	h.svc = ioc.GetServiceIocByName(blog.AppName).(blog.Service)
+	return nil
 }

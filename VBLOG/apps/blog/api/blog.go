@@ -42,11 +42,6 @@ func (h *Handler) CreateBlog(c *gin.Context) {
 	//c.ShouldBindBodyWithJSON(ins)
 	c.BindJSON(ins)
 	fmt.Println("=============>", ins)
-	value, exists := c.Get("title")
-	if exists {
-		fmt.Println("Title:", value)
-	}
-	fmt.Println("Title:", value)
 	logger.L().Info().Interface("request", ins)
 	createBlog, err2 := h.svc.CreateBlog(c.Request.Context(), ins)
 	if err2 != nil {

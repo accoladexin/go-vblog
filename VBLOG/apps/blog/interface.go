@@ -15,7 +15,7 @@ const (
 type Service interface {
 	// 查询文章列表
 	QueryBlog(context.Context, *QueryBlogRequest) (*BlogSet, error)
-	// 查询单个文章
+	//    	查询单个文章
 	DescribeBlog(context.Context, *DescribeBlogRequest) (*Blog, error)
 	// 接口一定要保证很强一个兼容性
 	CreateBlog(context.Context, *CreateBlogRequest) (*Blog, error)

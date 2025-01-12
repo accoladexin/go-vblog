@@ -3,6 +3,7 @@ package impl
 import (
 	"github.com/accoladexin/vblog/apps/blog"
 	"github.com/accoladexin/vblog/conf"
+	"github.com/accoladexin/vblog/ioc"
 	"gorm.io/gorm"
 )
 
@@ -22,6 +23,7 @@ type impl struct {
 
 // 声明一个变了_, 为啥声明的一个变量又不用他的指，只想要他的接口约束
 var _ blog.Service = &impl{}
+var _ ioc.ServiceObjIoc = &impl{}
 
 // 业务实例如何访问配置
 // 通常为这个实例类 提供初始化方法
@@ -37,4 +39,10 @@ func (i *impl) Init() error {
 
 func NewImpl() *impl {
 	return &impl{}
+}
+func (i *impl) Name() string {
+	return blog.AppName
+}
+func init() {
+	ioc.RegistryServiceIoc(&impl{})
 }
